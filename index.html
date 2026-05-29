@@ -10,7 +10,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #080801;
+    --bg: #080808;
     --surface: #101010;
     --text: #f0f0f0;
     --muted: #555;
@@ -18,7 +18,7 @@
     --ca-red: rgba(255,40,80,0.55);
     --ca-blue: rgba(40,180,255,0.55);
     --video-w: 1080px;
-    --card-w: 300px; /* 9:16 => height = 533px, well under 800px */
+    --card-w: 300px;
   }
 
   html { scroll-behavior: smooth; }
@@ -150,9 +150,7 @@
   }
   .carousel-arrow:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
 
-  .carousel-track-wrap {
-    flex: 1; overflow: hidden;
-  }
+  .carousel-track-wrap { flex: 1; overflow: hidden; }
   .carousel-track {
     display: flex; gap: 1rem;
     transition: transform .4s cubic-bezier(.4,0,.2,1);
@@ -280,8 +278,9 @@
   <nav>
     <div class="logo ca-text" data-text="MM">MM<span class="cursor"></span></div>
     <div class="nav-actions">
-      <a href="mailto:morgan.mendieta@gmail.com?subject=Contact%20from%20Website" class="btn btn-outline" id="contact">Contact</a>
       <a href="https://drive.google.com/file/d/12Di2uLP5gdmVxHGNdqGVrd-AKH8dsWT1/view?usp=share_link" class="btn btn-solid" target="_blank" rel="noopener noreferrer">↓ Resume</a>
+      <a href="mailto:morgan.mendieta@gmail.com?subject=Contact%20from%20Website" class="btn btn-outline" id="contact">Contact</a>
+      <a href="freestuff.html" class="btn btn-outline">Free Stuff</a>
     </div>
   </nav>
 
@@ -320,133 +319,85 @@
         <div class="carousel-track" id="track">
 
           <div class="sample-card" onclick="openVideo('rgu05tiySWI')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_01.jpg" alt="City of Minneapolis"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_01.jpg" alt="City of Minneapolis"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>City of Minneapolis</h3><div class="sample-tag">Director of Film</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('F57nBXd2T8A')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_02.jpg" alt="Salesforce Beacon"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_02.jpg" alt="Salesforce Beacon"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Salesforce Beacon</h3><div class="sample-tag">Animation</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('01gm-8XlgxI')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_03.jpg" alt="Look Up"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_03.jpg" alt="Look Up"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Look Up</h3><div class="sample-tag">Direction / Editor</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('YDXBogG_sLQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_04.jpg" alt="988 Mental HelpLine"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_04.jpg" alt="988 Mental HelpLine"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>988 Mental HelpLine</h3><div class="sample-tag">Director / Editor / Sound</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('YeVDhySVeng')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_05.jpg" alt="Cisco Muse"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_05.jpg" alt="Cisco Muse"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Cisco Muse</h3><div class="sample-tag">Director / Animator / Editor</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('wBuqNJSUBaE')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_06.jpg" alt="Good Measure"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_06.jpg" alt="Good Measure"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Good Measure</h3><div class="sample-tag">Director / Cinematography / Editor</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('6jhYWrAgTJ4')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_07.jpg" alt="Legacy of Good RECIDIVISM"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_07.jpg" alt="Legacy of Good RECIDIVISM"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Legacy of Good RECIDIVISM</h3><div class="sample-tag">Director / Editor / Sound</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('PeNBTfcTZaE')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_08.jpg" alt="History of AI"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_08.jpg" alt="History of AI"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>History of AI</h3><div class="sample-tag">Director / Animator / Sound Design</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('B7UJcApUDkQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_09.jpg" alt="UX app Smart Home"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_09.jpg" alt="UX app Smart Home"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>UX app Smart Home</h3><div class="sample-tag">Designer / Animator</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('rVYT6e_U8mQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_10.jpg" alt="UX PayWay"/>
-              <div class="sample-play">▶</div>
-            </div>
+            <div class="sample-thumb"><img src="assets/carousel/carousel_10.jpg" alt="UI PayWay"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>UI PayWay</h3><div class="sample-tag">Animator</div></div>
           </div>
 
-          <div class="sample-card" onclick="openVideo('XlcNdvWtYYw?')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/carousel_11.jpg" alt="Meet my Agent"/>
-              <div class="sample-play">▶</div>
-            </div>
+          <div class="sample-card" onclick="openVideo('XlcNdvWtYYw')">
+            <div class="sample-thumb"><img src="assets/carousel/carousel_11.jpg" alt="History of Agentic Agents"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>History of Agentic Agents</h3><div class="sample-tag">Director / Animator / Sound</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('_NBufaVVNpw')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/unison_health.jpg" alt="Unison Health Animation"/>
-              <div class="sample-play">▶</div>
-            </div>
-            <div class="sample-info"><h3>Logo Animation for Unison Health apps</h3><div class="sample-tag">Designer / Animation</div></div>
+            <div class="sample-thumb"><img src="assets/carousel/unison_health.jpg" alt="Unison Health Animation"/><div class="sample-play">▶</div></div>
+            <div class="sample-info"><h3>Logo Animation for Unison Health</h3><div class="sample-tag">Designer / Animation</div></div>
           </div>
 
-           <div class="sample-card" onclick="openVideo('xpwu6NptEeQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/banking_freedom.jpg" alt="Banking Freedom Web Animation"/>
-              <div class="sample-play">▶</div>
-            </div>
+          <div class="sample-card" onclick="openVideo('xpwu6NptEeQ')">
+            <div class="sample-thumb"><img src="assets/carousel/banking_freedom.jpg" alt="Banking Freedom Web Animation"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Banking Freedom Web Animation</h3><div class="sample-tag">Animation</div></div>
           </div>
 
-           <div class="sample-card" onclick="openVideo('JZALSQWEsPQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/smart_banking.jpg" alt="Smart Banking"/>
-              <div class="sample-play">▶</div>
-            </div>
+          <div class="sample-card" onclick="openVideo('JZALSQWEsPQ')">
+            <div class="sample-thumb"><img src="assets/carousel/smart_banking.jpg" alt="Smart Banking"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Smart Banking</h3><div class="sample-tag">Animation</div></div>
           </div>
 
-           <div class="sample-card" onclick="openVideo('MH-F30OPhTQ')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/yields.jpg" alt="Yields"/>
-              <div class="sample-play">▶</div>
-            </div>
+          <div class="sample-card" onclick="openVideo('MH-F30OPhTQ')">
+            <div class="sample-thumb"><img src="assets/carousel/yields.jpg" alt="Yields"/><div class="sample-play">▶</div></div>
             <div class="sample-info"><h3>Yields</h3><div class="sample-tag">Animation</div></div>
           </div>
 
           <div class="sample-card" onclick="openVideo('LTiIX7Nc8dA')">
-            <div class="sample-thumb">
-              <img src="assets/carousel/axion.jpg" alt="Yields"/>
-              <div class="sample-play">▶</div>
-            </div>
-            <div class="sample-info"><h3>Axion private jet reservation</h3><div class="sample-tag">Director / Producer / Animation</div></div>
+            <div class="sample-thumb"><img src="assets/carousel/axion.jpg" alt="Axion"/><div class="sample-play">▶</div></div>
+            <div class="sample-info"><h3>Axion Private Jet Reservation</h3><div class="sample-tag">Director / Producer / Animation</div></div>
           </div>
-          
+
         </div>
       </div>
       <button class="carousel-arrow" id="next">&#8594;</button>
@@ -463,6 +414,7 @@
   <div class="cta-row">
     <a href="https://drive.google.com/file/d/12Di2uLP5gdmVxHGNdqGVrd-AKH8dsWT1/view?usp=share_link" class="btn btn-solid" target="_blank" rel="noopener noreferrer">↓ Download Resume</a>
     <a href="mailto:morgan.mendieta@gmail.com?subject=Contact%20from%20Website" class="btn btn-outline">Get In Touch</a>
+    <a href="freestuff.html" class="btn btn-outline">Free Stuff</a>
   </div>
 
   <footer>
@@ -501,35 +453,24 @@
     document.getElementById('modal-iframe').src = '';
   }
 
-  // HERO VIDEO
-  function loadYT() {
-    const p = document.getElementById('yt-player');
-    p.style.display = 'block';
-    p.innerHTML = '<iframe src="https://www.youtube.com/embed/y-UgkYdcrOQ?autoplay=1&rel=0&modestbranding=1" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" style="position:absolute;inset:0;width:100%;height:100%;border-radius:4px;"></iframe>';
-  }
-
-  // SHUFFLE CAROUSEL CARDS
-  function shuffleCards() {
-    const c = [...track.querySelectorAll('.sample-card')];
-    c.sort(() => Math.random() - 0.5);
-    c.forEach(c => track.appendChild(c));
-  }
-  const track = document.getElementById('track');
-  const prev  = document.getElementById('prev');
-  const next  = document.getElementById('next');
+  // CAROUSEL
+  const track  = document.getElementById('track');
+  const prev   = document.getElementById('prev');
+  const next   = document.getElementById('next');
   const dotsEl = document.getElementById('dots');
-  const VISIBLE = 3;
   let idx = 0;
 
-  function cards() { return track.querySelectorAll('.sample-card'); }
-  function total() { return cards().length; }
-  function maxIdx() { return Math.max(0, total() - getVisible()); }
-
-  function cardW() {
-    const c = cards()[0];
-    if (!c) return 0;
-    return c.offsetWidth + 16; // 16px = 1rem gap
+  function cards()   { return track.querySelectorAll('.sample-card'); }
+  function total()   { return cards().length; }
+  function getVisible() {
+    const w = track.parentElement.offsetWidth;
+    if (w < 400) return 1;
+    if (w < 700) return 2;
+    if (w < 1000) return 3;
+    return 5;
   }
+  function maxIdx()  { return Math.max(0, total() - getVisible()); }
+  function cardW()   { const c = cards()[0]; return c ? c.offsetWidth + 16 : 0; }
 
   function buildDots() {
     dotsEl.innerHTML = '';
@@ -542,25 +483,14 @@
   }
 
   function goTo(i) {
-    idx = ((i % total()) + total()) % total();
-    if (idx > maxIdx()) idx = 0;
+    idx = i < 0 ? maxIdx() : i > maxIdx() ? 0 : i;
     track.style.transform = `translateX(-${idx * cardW()}px)`;
     dotsEl.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === idx));
   }
 
-  prev.addEventListener('click', () => idx === 0 ? goTo(maxIdx()) : goTo(idx - 1));
-  next.addEventListener('click', () => idx >= maxIdx() ? goTo(0) : goTo(idx + 1));
-  window.addEventListener('resize', () => { buildDots(); goTo(0); });
+  prev.addEventListener('click', () => goTo(idx - 1));
+  next.addEventListener('click', () => goTo(idx + 1));
 
-  function getVisible() {
-    const w = track.parentElement.offsetWidth;
-    if (w < 400) return 1;
-    if (w < 700) return 2;
-    if (w < 1000) return 3;
-    return 5;
-  }
-
-  // Set card widths based on visible count
   function setCardWidths() {
     const trackW = track.parentElement.offsetWidth;
     const vis = getVisible();
@@ -568,7 +498,14 @@
     cards().forEach(c => c.style.width = w + 'px');
   }
 
-  window.addEventListener('resize', setCardWidths);
+  function shuffleCards() {
+    const c = [...cards()];
+    c.sort(() => Math.random() - 0.5);
+    c.forEach(c => track.appendChild(c));
+  }
+
+  window.addEventListener('resize', () => { setCardWidths(); buildDots(); goTo(0); });
+
   shuffleCards();
   setCardWidths();
   buildDots();
