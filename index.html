@@ -295,12 +295,26 @@
   <!-- MAIN VIDEO -->
   <div class="main-video-wrap">
     <div class="video-frame">
-      <iframe
-        src="https://www.youtube.com/embed/y-UgkYdcrOQ?autoplay=1&mute=1&loop=1&playlist=y-UgkYdcrOQ&rel=0&modestbranding=1&playsinline=1&controls=1"
-        frameborder="0" allowfullscreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        style="position:absolute;inset:0;width:100%;height:100%;border-radius:4px;">
-      </iframe>
+     <div id="yt-facade" style="position:absolute;inset:0;width:100%;height:100%;border-radius:4px;cursor:pointer;background:#000;overflow:hidden;" onclick="loadYT()">
+  <img src="https://img.youtube.com/vi/y-UgkYdcrOQ/maxresdefault.jpg" alt="Video thumbnail" style="width:100%;height:100%;object-fit:cover;opacity:0.8;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;background:#ff0000;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+    <div style="width:0;height:0;border-top:14px solid transparent;border-bottom:14px solid transparent;border-left:24px solid white;margin-left:4px;"></div>
+  </div>
+</div>
+<script>
+function loadYT() {
+  var iframe = document.createElement('iframe');
+  iframe.src = 'https://www.youtube.com/embed/y-UgkYdcrOQ?autoplay=1&mute=1&loop=1&playlist=y-UgkYdcrOQ&rel=0&modestbranding=1&playsinline=1&controls=1';
+  iframe.frameBorder = '0';
+  iframe.allowFullscreen = true;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.style = 'position:absolute;inset:0;width:100%;height:100%;border-radius:4px;';
+  var facade = document.getElementById('yt-facade');
+  if (facade) facade.parentNode.replaceChild(iframe, facade);
+}
+
+setTimeout(loadYT, 2500);
+</script>
     </div>
   </div>
 
