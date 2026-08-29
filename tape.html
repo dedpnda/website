@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mixtape – Morgan Mendieta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@300;400;600&family=Montserrat:wght@100;900&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #080808;
+    --surface: #101010;
+    --text:    #f0f0f0;
+    --muted:   #555;
+    --border:  rgba(255,255,255,0.07);
+    --ca-red:  rgba(255,40,80,0.55);
+    --ca-blue: rgba(40,180,255,0.55);
+    --gold:    #C8B560;
+    --red:     #E03030;
+    --mono:    'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ── NAV (exact from index) ── */
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'VT323', monospace;
+    font-size: 1.5rem; letter-spacing: .1em; color: var(--text);
+    text-decoration: none;
+  }
+  .nav-actions { display: flex; gap: .8rem; }
+
+  /* ── BUTTONS (exact from index) ── */
+  .btn {
+    padding: .55rem 1.3rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .82rem; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    border-radius: 3px; transition: all .2s;
+    display: inline-block;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text);
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.04); }
+  .btn-solid { background: var(--text); border: 1px solid var(--text); color: #080808; }
+  .btn-solid:hover { background: #ccc; border-color: #ccc; }
+
+  /* ── CHROMATIC ABERRATION (exact from index) ── */
+  .ca-text { position: relative; display: inline-block; color: var(--text); }
+  .ca-text::before, .ca-text::after {
+    content: attr(data-text);
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; pointer-events: none;
+  }
+  .ca-text::before { color: var(--ca-red);  transform: translate(-2.5px,  0.5px); mix-blend-mode: screen; }
+  .ca-text::after  { color: var(--ca-blue); transform: translate( 2.5px, -0.5px); mix-blend-mode: screen; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 4rem 3rem 2.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
+  .hero-tag {
+    font-size: .7rem; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; text-align: center;
+    margin-bottom: .5rem;
+  }
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.8rem, 7.5vw, 7rem);
+    letter-spacing: .04em; text-align: center; line-height: 1.05;
+  }
+  .hero h1 .thin  { font-weight: 100; }
+  .hero h1 .heavy { font-weight: 900; }
+  .hero-sub {
+    font-size: .78rem; color: var(--muted);
+    letter-spacing: .18em; text-transform: uppercase; text-align: center;
+    margin-top: .75rem;
+  }
+
+  /* ── CASSETTE SVG ── */
+  .cassette-wrap {
+    margin: 3rem auto 0;
+    width: 100%;
+    max-width: 520px;
+    padding: 0 24px;
+  }
+  .cassette-svg { width: 100%; height: auto; display: block; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .spool-left  { transform-origin: 155px 182px; animation: spin 3.2s linear infinite; }
+  .spool-right { transform-origin: 345px 182px; animation: spin 3.2s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .spool-left, .spool-right { animation: none; }
+  }
+  .cassette-wrap:hover .spool-left,
+  .cassette-wrap:hover .spool-right { animation-duration: 1.4s; }
+
+  /* ── DIVIDER (matches index style) ── */
+  .divider {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 0 3rem; margin: 3rem auto 0;
+    max-width: 860px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-label {
+    font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ── TRACK LIST ── */
+  .tracklist-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 3rem 2rem;
+  }
+  .side-header {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 2rem 0 1.2rem;
+  }
+  .side-letter {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--gold); letter-spacing: 0.1em;
+  }
+  .side-title {
+    font-family: var(--mono);
+    font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.01em;
+  }
+  .side-duration {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--muted); margin-left: auto; letter-spacing: 0.06em;
+  }
+  .track {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s; border-radius: 2px;
+  }
+  .track:hover { background: rgba(255,255,255,0.03); }
+  .track:hover .track-num { color: var(--red); }
+  .track-num {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    letter-spacing: 0.06em; transition: color 0.15s; padding-left: 4px;
+  }
+  .track-info { display: flex; flex-direction: column; gap: 2px; }
+  .track-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .track-meta {
+    font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.06em;
+  }
+  .track-duration {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+  }
+
+  /* ── LABEL CARD ── */
+  .label-card {
+    max-width: 860px; margin: 0 auto; padding: 0 3rem;
+  }
+  .label-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 2rem 2.2rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2.5rem;
+  }
+  .label-field { display: flex; flex-direction: column; gap: 4px; }
+  .label-key {
+    font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em;
+  }
+  .label-val {
+    font-family: var(--mono); font-size: 13px; color: var(--text);
+  }
+  .label-val a { color: var(--gold); text-decoration: none; }
+  .label-val a:hover { text-decoration: underline; }
+
+  /* ── CTA ROW ── */
+  .cta-row {
+    display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap;
+    padding: 2.5rem 3rem 0;
+  }
+
+  /* ── FOOTER (exact from index) ── */
+  footer {
+    margin-top: 5rem;
+    padding: 1.8rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-name {
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem; letter-spacing: .08em; color: var(--muted);
+  }
+  .footer-social { display: flex; gap: 1.2rem; align-items: center; }
+  .footer-social a {
+    color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; transition: color .2s;
+  }
+  .footer-social a:hover { color: var(--text); }
+  .footer-social svg { width: 16px; height: 16px; fill: currentColor; }
+  .footer-copy {
+    font-size: .72rem; color: var(--muted); font-family: 'VT323', monospace;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero { padding: 3rem 1.5rem 2rem; }
+    .divider, .tracklist-section, .label-card, .cta-row { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .label-inner { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- NAV (exact from index) -->
+  <nav>
+    <a href="https://www.dedpnda.com/" class="logo ca-text" data-text="MM">MM</a>
+    <div class="nav-actions">
+      <a href="https://www.youtube.com/watch?v=y-UgkYdcrOQ&t=28s" class="btn btn-outline" target="_blank" rel="noopener noreferrer">▶ View Reel</a>
+      <a href="mailto:morgan.mendieta@gmail.com?subject=Contact%20from%20Website" class="btn btn-outline">Contact</a>
+      <a href="https://www.dedpnda.com/freestuff" class="btn btn-outline">Free Stuff</a>
+    </div>
+  </nav>
+
+  <!-- CASSETTE -->
+  <div class="cassette-wrap" aria-hidden="true">
+    <svg class="cassette-svg" viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="16" width="460" height="268" rx="14" fill="#1A1A1A" stroke="#2E2E2E" stroke-width="1.5"/>
+      <rect x="44" y="30" width="412" height="150" rx="6" fill="#1E1C14" stroke="#2E2E2E" stroke-width="1"/>
+      <rect x="44" y="30" width="412" height="36" rx="6" fill="#C8B560" opacity="0.15"/>
+      <text x="250" y="55" font-family="Space Mono, monospace" font-size="11" font-weight="700" fill="#C8B560" text-anchor="middle" letter-spacing="4">MORGAN MENDIETA</text>
+      <text x="250" y="76" font-family="Space Mono, monospace" font-size="8" fill="#5A5A5A" text-anchor="middle" letter-spacing="6">MIXTAPE VOL. 1</text>
+      <text x="96"  y="116" font-family="Space Mono, monospace" font-size="9" fill="#F0ECD8" text-anchor="middle" opacity="0.6">SIDE A</text>
+      <text x="96"  y="130" font-family="Space Mono, monospace" font-size="7" fill="#C8B560" text-anchor="middle" opacity="0.85" letter-spacing="2">Production</text>
+      <text x="404" y="116" font-family="Space Mono, monospace" font-size="9" fill="#F0ECD8" text-anchor="middle" opacity="0.6">SIDE B</text>
+      <text x="404" y="130" font-family="Space Mono, monospace" font-size="7" fill="#C8B560" text-anchor="middle" opacity="0.85" letter-spacing="2">Post-Production</text>
+      <rect x="140" y="96" width="220" height="88" rx="4" fill="#0A0A0A" stroke="#2E2E2E" stroke-width="1"/>
+      <path d="M155 182 Q 155 162 178 154 L 322 154 Q 345 162 345 182" stroke="#3A3020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <g class="spool-left">
+        <circle cx="155" cy="182" r="42" fill="#111111" stroke="#2E2E2E" stroke-width="1.5"/>
+        <circle cx="155" cy="182" r="24" fill="#0A0A0A" stroke="#333333" stroke-width="1"/>
+        <circle cx="155" cy="182" r="7"  fill="#222222" stroke="#444444" stroke-width="1"/>
+        <line x1="155" y1="158" x2="155" y2="175" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="155" y1="189" x2="155" y2="206" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="131" y1="182" x2="148" y2="182" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="162" y1="182" x2="179" y2="182" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="138" y1="165" x2="149" y2="176" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="161" y1="188" x2="172" y2="199" stroke="#2E2E2E" stroke-width="1.5"/>
+      </g>
+      <g class="spool-right">
+        <circle cx="345" cy="182" r="42" fill="#111111" stroke="#2E2E2E" stroke-width="1.5"/>
+        <circle cx="345" cy="182" r="24" fill="#0A0A0A" stroke="#333333" stroke-width="1"/>
+        <circle cx="345" cy="182" r="7"  fill="#222222" stroke="#444444" stroke-width="1"/>
+        <line x1="345" y1="158" x2="345" y2="175" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="345" y1="189" x2="345" y2="206" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="321" y1="182" x2="338" y2="182" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="352" y1="182" x2="369" y2="182" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="328" y1="165" x2="339" y2="176" stroke="#2E2E2E" stroke-width="1.5"/>
+        <line x1="351" y1="188" x2="362" y2="199" stroke="#2E2E2E" stroke-width="1.5"/>
+      </g>
+      <circle cx="48"  cy="34"  r="4" fill="#161616" stroke="#2E2E2E" stroke-width="1"/>
+      <circle cx="452" cy="34"  r="4" fill="#161616" stroke="#2E2E2E" stroke-width="1"/>
+      <circle cx="48"  cy="270" r="4" fill="#161616" stroke="#2E2E2E" stroke-width="1"/>
+      <circle cx="452" cy="270" r="4" fill="#161616" stroke="#2E2E2E" stroke-width="1"/>
+      <circle cx="250" cy="276" r="3.5" fill="#E03030" opacity="0.8"/>
+      <rect x="190" y="268" width="120" height="8" rx="4" fill="#0A0A0A" stroke="#222222" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-tag">// video production</p>
+    <h1>
+      <span class="ca-text thin" data-text="MIX">MIX</span><span class="ca-text heavy" data-text="TAPE">TAPE</span>
+    </h1>
+    <p class="hero-sub">Sound Design &nbsp;·&nbsp; Score &nbsp;·&nbsp; Music Production</p>
+  </section>
+
+
+  <!-- DIVIDER A -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">// Side A</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- TRACKLIST SIDE A -->
+  <section class="tracklist-section">
+    <div class="side-header">
+      <span class="side-letter">A—</span>
+      <span class="side-title">We Shoot It</span>
+      <span class="side-duration">Production</span>
+    </div>
+    <div class="track">
+      <span class="track-num">01</span>
+      <div class="track-info">
+        <span class="track-name">Commercial Spots</span>
+        <span class="track-meta">15 &amp; 30 sec · Scripted · Ready to Air · Small Business to Enterprise</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">02</span>
+      <div class="track-info">
+        <span class="track-name">Script to Screen</span>
+        <span class="track-meta">Full Production · Concept, Script, Shoot, Final Edit</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">03</span>
+      <div class="track-info">
+        <span class="track-name">Short-Form Social</span>
+        <span class="track-meta">TikTok · Reels · Shorts · YouTube · Instagram · Scroll-Stopping Native Content</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">04</span>
+      <div class="track-info">
+        <span class="track-name">Interview Capture</span>
+        <span class="track-meta">Single or Multi-Cam · Directed &amp; Lit · Talking Heads &amp; B-Roll</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">05</span>
+      <div class="track-info">
+        <span class="track-name">Event Coverage</span>
+        <span class="track-meta">Live Capture · Highlight Reels · Same-Day Edits</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+  </section>
+
+  <!-- DIVIDER B -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">// Side B</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- TRACKLIST SIDE B -->
+  <section class="tracklist-section">
+    <div class="side-header">
+      <span class="side-letter">B—</span>
+      <span class="side-title">We Finish It</span>
+      <span class="side-duration">Post-Production</span>
+    </div>
+    <div class="track">
+      <span class="track-num">01</span>
+      <div class="track-info">
+        <span class="track-name">Motion Graphics</span>
+        <span class="track-meta">Branded Animation · Titles · Lower Thirds · Visual Identity in Motion</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">02</span>
+      <div class="track-info">
+        <span class="track-name">Social Cut-Downs</span>
+        <span class="track-meta">Platform-Native Edits · TikTok · Reels · Shorts · Stories</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">03</span>
+      <div class="track-info">
+        <span class="track-name">YouTube &amp; LinkedIn</span>
+        <span class="track-meta">Long-Form Edits · Talking Heads · B-Roll Packages · Thought Leadership</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">04</span>
+      <div class="track-info">
+        <span class="track-name">Director for Hire</span>
+        <span class="track-meta">On-Set Creative Direction · Any Crew Size · Concept to Camera</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+    <div class="track">
+      <span class="track-num">05</span>
+      <div class="track-info">
+        <span class="track-name">Sound Design &amp; Mix</span>
+        <span class="track-meta">Music · SFX · Voice-Over Finishing · Broadcast Ready</span>
+      </div>
+      <span class="track-duration">→</span>
+    </div>
+  </section>
+
+  <!-- CREDITS DIVIDER -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">// Details</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- LABEL CARD -->
+  <div class="label-card" style="margin-top: 2rem;">
+    <div class="label-inner">
+      <div class="label-field">
+        <span class="label-key">DIRECTOR</span>
+        <span class="label-val">Morgan Mendieta</span>
+      </div>
+      <div class="label-field">
+        <span class="label-key">FORMAT</span>
+        <span class="label-val">4K · Dual Camera Available</span>
+      </div>
+      <div class="label-field">
+        <span class="label-key">PRODUCTION</span>
+        <span class="label-val">Script · Shoot · Edit · Delivery</span>
+      </div>
+      <div class="label-field">
+        <span class="label-key">TOOLS</span>
+        <span class="label-val">DaVinci Resolve · After Effects · Premiere Pro</span>
+      </div>
+      <div class="label-field">
+        <span class="label-key">PLATFORMS</span>
+        <span class="label-val">TikTok · Instagram · YouTube · LinkedIn · Broadcast</span>
+      </div>
+      <div class="label-field">
+        <span class="label-key">CONTACT</span>
+        <span class="label-val"><a href="mailto:morgan.mendieta@gmail.com?subject=Video%20Production%20Inquiry">morgan.mendieta@gmail.com</a></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-row">
+    <a href="https://calendar.app.google/9RCLAbVQxb4YMbqr7" class="btn btn-solid" target="_blank" rel="noopener noreferrer">Book a Call</a>
+    <a href="mailto:morgan.mendieta@gmail.com?subject=Video%20Production%20Inquiry" class="btn btn-outline">Get In Touch</a>
+    <a href="https://www.dedpnda.com/" class="btn btn-outline">← Portfolio</a>
+  </div>
+
+  <!-- FOOTER (exact from index) -->
+  <footer>
+    <div class="footer-name">Morgan Mendieta</div>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/morganmendieta" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.22 0z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/watch?v=y-UgkYdcrOQ&t=28s" title="YouTube" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.54 3.6 12 3.6 12 3.6s-7.54 0-9.38.45A3.02 3.02 0 0 0 .5 6.19 31.7 31.7 0 0 0 .05 12a31.7 31.7 0 0 0 .45 5.81 3.02 3.02 0 0 0 2.12 2.14C4.46 20.4 12 20.4 12 20.4s7.54 0 9.38-.45a3.02 3.02 0 0 0 2.12-2.14A31.7 31.7 0 0 0 23.95 12a31.7 31.7 0 0 0-.45-5.81zM9.75 15.52V8.48L15.86 12l-6.11 3.52z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/dedpnda" title="Instagram" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.516 2.497 5.783 2.226 7.15 2.163 8.416 2.105 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.013 8.332 0 8.741 0 12c0 3.259.013 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.987 8.741 24 12 24c3.259 0 3.668-.013 4.948-.072 1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.059-1.28.072-1.689.072-4.948 0-3.259-.013-3.668-.072-4.948-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.013 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      </a>
+      <a href="https://vimeo.com/dedpnda" title="Vimeo" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881l-1.92-7.062c-.719-2.584-1.478-3.878-2.275-3.878-.183 0-.808.378-1.878 1.132L0 7.479c1.059-.935 2.107-1.87 3.148-2.806C4.65 3.32 5.8 2.6 6.609 2.518c1.9-.18 3.08 1.112 3.529 3.882.479 2.964.809 4.812.992 5.535.548 2.506 1.148 3.754 1.8 3.754.508 0 1.266-.796 2.287-2.393 1.016-1.596 1.561-2.811 1.619-3.641.145-1.382-.396-2.075-1.619-2.075-.57 0-1.162.131-1.77.396 1.177-3.86 3.41-5.733 6.706-5.613 2.44.089 3.594 1.653 3.824 4.053z"/></svg>
+      </a>
+    </div>
+    <div class="footer-copy">© 2026 · All rights reserved</div>
+  </footer>
+
+</main>
+</body>
+</html>
