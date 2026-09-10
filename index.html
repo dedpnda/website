@@ -119,6 +119,35 @@
     pointer-events: none; z-index: 2;
   }
 
+  /* VIDEO FACADE */
+  .video-facade {
+    position: absolute; inset: 0;
+    cursor: pointer; z-index: 1;
+  }
+  .video-facade img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s;
+  }
+  .video-facade:hover img { opacity: 0.75; }
+  .play-btn {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  .video-facade:hover .play-btn {
+    background: rgba(0,0,0,0.85);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .play-btn svg { width: 28px; height: 28px; fill: #fff; margin-left: 4px; }
+  .video-facade.hidden { display: none; }
+
   /* DIVIDER */
   .divider {
     display: flex; align-items: center; gap: 1.2rem;
@@ -294,13 +323,20 @@
 
   <!-- MAIN VIDEO -->
   <div class="main-video-wrap">
-    <div class="video-frame">
-      <iframe
-        src="https://kinescope.io/embed/2Xgnm9NDpaaP4dBt7gazWR"
-        frameborder="0" allowfullscreen
-        allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;"
-        style="position:absolute;inset:0;width:100%;height:100%;border-radius:4px;">
-      </iframe>
+    <div class="video-frame" id="video-frame">
+      <!-- Facade: shown until user clicks -->
+      <div class="video-facade" id="video-facade" onclick="loadVideo()">
+        <img
+          src="https://img.youtube.com/vi/y-UgkYdcrOQ/maxresdefault.jpg"
+          alt="Morgan Mendieta — Demo Reel"
+          loading="lazy"
+        />
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <!-- Iframe: injected on click -->
+      <div id="video-player" style="position:absolute;inset:0;display:none;"></div>
     </div>
   </div>
 
@@ -511,5 +547,14 @@
   buildDots();
   goTo(0);
 </script>
+  <script>
+    function loadVideo() {
+      var facade = document.getElementById('video-facade');
+      var player = document.getElementById('video-player');
+      facade.classList.add('hidden');
+      player.style.display = 'block';
+      player.innerHTML = '<iframe src="https://kinescope.io/embed/2Xgnm9NDpaaP4dBt7gazWR?autoplay=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;" frameborder="0" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border-radius:4px;"></iframe>';
+    }
+  </script>
 </body>
 </html>
