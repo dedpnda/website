@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-Week Fitness Plan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f2; color: #1a1a18; }
+
+  .app-header { background: #1a1a18; color: #fff; padding: 1.25rem 2rem; }
+  .app-header h1 { font-size: 20px; font-weight: 600; }
+  .app-header p { font-size: 13px; color: #888; margin-top: 2px; }
+
+  .main-tabs { display: flex; background: #fff; border-bottom: 1px solid #e8e8e4; padding: 0 2rem; }
+  .main-tab { padding: 1rem 1.5rem; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; color: #888; transition: all 0.15s; border-top: none; border-left: none; border-right: none; background: none; font-family: inherit; }
+  .main-tab:hover { color: #333; }
+  .main-tab.active { color: #1a1a18; border-bottom-color: #1a1a18; }
+
+  .tab-content { display: none; padding: 2rem; max-width: 960px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.75rem; }
+  .stat { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; border: 1px solid #e8e8e4; }
+  .stat-label { font-size: 11px; color: #aaa; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 20px; font-weight: 600; }
+
+  .sub-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .sub-btn { padding: 7px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff; color: #666; font-family: inherit; transition: all 0.15s; }
+  .sub-btn:hover { border-color: #999; color: #333; }
+  .sub-btn.active { background: #1a1a18; color: #fff; border-color: #1a1a18; font-weight: 500; }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #666; }
+
+  .badge { font-size: 11px; padding: 3px 9px; border-radius: 99px; display: inline-block; font-weight: 500; }
+  .phase-1 { background: #dceefb; color: #1a5c99; }
+  .phase-2 { background: #dff0d0; color: #2d6e10; }
+  .phase-3 { background: #fde8c4; color: #7a4a08; }
+  .run-easy { background: #dceefb; color: #1a5c99; }
+  .run-full { background: #dff0d0; color: #2d6e10; }
+  .run-off  { background: #f0efe8; color: #888; }
+  .p-chicken { background: #dff0d0; color: #2d6e10; }
+  .p-burger  { background: #fde8c4; color: #7a4a08; }
+  .p-fish    { background: #dceefb; color: #1a5c99; }
+  .p-tuna    { background: #e8e4fb; color: #4a3a99; }
+  .p-egg     { background: #fce4f0; color: #7a2050; }
+  .p-mixed   { background: #f0efe8; color: #666; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+  .card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1rem; }
+  .card.rest-card { background: #fafaf8; border-style: dashed; }
+  .card-top-label { font-size: 10px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .card-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #1a1a18; }
+  .rest-card .card-title { color: #aaa; }
+  .card-items { list-style: none; margin-bottom: 10px; }
+  .card-items li { font-size: 12px; color: #666; padding: 2px 0; line-height: 1.5; }
+  .card-items li::before { content: "·"; margin-right: 5px; color: #ccc; }
+
+  .info-bar { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
+  .info-bar-label { font-size: 13px; color: #666; }
+  .info-bar-vals { display: flex; gap: 24px; }
+  .ibv { text-align: right; }
+  .ibv-num { font-size: 16px; font-weight: 600; color: #1a1a18; }
+  .ibv-sub { font-size: 11px; color: #aaa; }
+
+  .tips-box { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1.1rem 1.4rem; margin-bottom: 1.5rem; }
+  .tips-title { font-size: 13px; font-weight: 600; color: #666; margin-bottom: 8px; }
+  .tip { font-size: 13px; color: #555; padding: 3px 0; line-height: 1.5; }
+  .tip::before { content: "→"; margin-right: 8px; color: #bbb; }
+
+  .option-toggle { display: flex; gap: 8px; margin-bottom: 1.25rem; align-items: center; }
+  .option-label { font-size: 13px; color: #888; margin-right: 4px; }
+  .opt-btn { padding: 6px 16px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff; color: #666; font-family: inherit; transition: all 0.15s; }
+  .opt-btn.active { background: #2d6e10; color: #fff; border-color: #2d6e10; font-weight: 500; }
+
+  .notes-box { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 0.5rem; }
+  .notes-box h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+  .notes-box ul { list-style: none; }
+  .notes-box li { font-size: 13px; color: #555; padding: 4px 0; line-height: 1.6; }
+  .notes-box li::before { content: "✓"; margin-right: 8px; color: #5a9e3a; }
+
+  .phase-label { margin-bottom: 1rem; }
+
+  footer { text-align: center; font-size: 12px; color: #bbb; padding: 2rem; }
+
+  @media (max-width: 560px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .tab-content { padding: 1.25rem 1rem; }
+    .main-tab { padding: 0.85rem 1rem; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>6-Week Fitness Plan</h1>
+  <p>Male · 43 yrs · 165 lb → 145–150 lb goal</p>
+</div>
+
+<div class="main-tabs">
+  <button class="main-tab active" onclick="showTab('workout')">Workout plan</button>
+  <button class="main-tab" onclick="showTab('meals')">Meal plan</button>
+</div>
+
+<!-- ───────────── WORKOUT TAB ───────────── -->
+<div id="tab-workout" class="tab-content active">
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-label">Start weight</div><div class="stat-val">165 lb</div></div>
+    <div class="stat"><div class="stat-label">Goal weight</div><div class="stat-val">145–150 lb</div></div>
+    <div class="stat"><div class="stat-label">Run days/week</div><div class="stat-val">3–4</div></div>
+    <div class="stat"><div class="stat-label">Calorie deficit</div><div class="stat-val">~500/day</div></div>
+  </div>
+
+  <div class="sub-tabs" id="w-tabs"></div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="badge run-easy">run/walk</span> building up</div>
+    <div class="legend-item"><span class="badge run-full">full 5K</span> goal pace</div>
+    <div class="legend-item"><span class="badge run-off">no run</span> rest legs</div>
+  </div>
+
+  <div class="phase-label" id="w-phase"></div>
+  <div class="card-grid" id="w-grid"></div>
+  <div class="tips-box" id="w-tips"></div>
+
+  <div class="notes-box" style="margin-top:1.5rem">
+    <h2>General reminders</h2>
+    <ul>
+      <li>5 min dynamic warmup before every run: leg swings, high knees, hip circles</li>
+      <li>Stretch calves and hamstrings after every run to prevent shin splints</li>
+      <li>Run 2 min / walk 1 min in weeks 1–2, then build to continuous running</li>
+      <li>Off days aren't laziness — tendons and joints adapt on rest days</li>
+      <li>Coffee with half & half before your run is totally fine</li>
+      <li>Weigh yourself weekly, same time each morning</li>
+      <li>Expect 1.5–2.5 lb loss per week with good adherence</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ───────────── MEAL TAB ───────────── -->
+<div id="tab-meals" class="tab-content">
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-label">Daily calories</div><div class="stat-val">~1,850</div></div>
+    <div class="stat"><div class="stat-label">Daily protein</div><div class="stat-val">~140g</div></div>
+    <div class="stat"><div class="stat-label">Meals/day</div><div class="stat-val">3 + snack</div></div>
+    <div class="stat"><div class="stat-label">Deficit</div><div class="stat-val">~500 cal</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="badge p-chicken">chicken</span></div>
+    <div class="legend-item"><span class="badge p-burger">beef</span></div>
+    <div class="legend-item"><span class="badge p-fish">fish</span></div>
+    <div class="legend-item"><span class="badge p-tuna">tuna</span></div>
+    <div class="legend-item"><span class="badge p-egg">eggs/sausage</span></div>
+    <div class="legend-item"><span class="badge p-mixed">mixed</span></div>
+  </div>
+
+  <div class="sub-tabs" id="m-tabs"></div>
+
+  <div class="option-toggle">
+    <span class="option-label">Meal option:</span>
+    <button class="opt-btn active" id="opt-a" onclick="setMealOption(0)">Option A</button>
+    <button class="opt-btn" id="opt-b" onclick="setMealOption(1)">Option B</button>
+  </div>
+
+  <div class="card-grid" id="m-grid"></div>
+  <div class="info-bar" id="m-total"></div>
+
+  <div class="notes-box">
+    <h2>Key reminders</h2>
+    <ul>
+      <li>Breakfast is the same every day — eggs and sausage. Consistent and simple.</li>
+      <li>Tuna with 1–2 tbsp mayo is totally fine — use it as a binder, not a scoop.</li>
+      <li>Skip the bun on burgers and shell on tacos — saves ~150 cal with no loss of fullness.</li>
+      <li>Salmon is the best fish choice — omega-3s help recovery from running and lifting.</li>
+      <li>Greek yogurt (plain, full fat) is one of the best snacks — high protein and filling.</li>
+      <li>Drink at least 10 cups of water daily — hunger is often just dehydration.</li>
+      <li>Never drop below 1,600 cal/day — muscle loss kicks in below that.</li>
+      <li>Prep extra at Sunday dinner for Monday — makes the week much easier.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>For personal use · 6-week fat loss plan</footer>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.main-tab').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+/* ── WORKOUT DATA ── */
+var wWeeks = [
+  {
+    label: "Weeks 1–2", phase: "Foundation — every other day", phaseClass: "phase-1",
+    days: [
+      { day: "Mon", title: "Strength: full body", items: ["Goblet squats 3×12", "Push-ups 3×10", "DB rows 3×12", "Plank 3×30s"], run: "easy", runText: "20 min run/walk" },
+      { day: "Tue", title: "Core + mobility", items: ["Dead bug 3×10", "Hip circles", "Leg swings", "Light stretching"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Strength: upper", items: ["DB press 3×10", "Lat pulldown 3×12", "Shoulder press 3×10", "Face pulls 3×15"], run: "easy", runText: "20 min run/walk" },
+      { day: "Thu", title: "Active recovery", items: ["Foam rolling", "Light stretching", "Easy mobility"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Strength: lower", items: ["Lunges 3×10/leg", "Leg press 3×12", "Romanian DL 3×10", "Calf raises 3×15"], run: "easy", runText: "22 min run/walk" },
+      { day: "Sat", title: "Light circuit", items: ["Bodyweight only", "3 rounds easy pace", "Focus on form"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Rest & recover", "Short walk optional"], rest: true, run: "off", runText: "Full rest" }
+    ],
+    tips: ["Run 2 min, walk 1 min — repeat for the full session duration", "Off days let your shins, knees, and tendons recover — this prevents injury", "5 min dynamic warmup before every run: leg swings, high knees, hip circles", "Stretch calves and hamstrings after every run to prevent shin splints"]
+  },
+  {
+    label: "Weeks 3–4", phase: "Building — longer runs", phaseClass: "phase-2",
+    days: [
+      { day: "Mon", title: "Strength: push", items: ["Bench press 4×8", "Incline DB press 3×10", "Tricep dips 3×10", "Lateral raises 3×12"], run: "easy", runText: "30 min continuous" },
+      { day: "Tue", title: "HIIT cardio", items: ["20 min intervals", "40s hard / 50s easy", "Bike or treadmill"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Strength: pull", items: ["Pull-ups 4×6", "Cable rows 3×10", "Bicep curls 3×12", "Face pulls 3×15"], run: "easy", runText: "32 min continuous" },
+      { day: "Thu", title: "Active recovery", items: ["Stretching & foam roll", "Light mobility work"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Strength: legs", items: ["Squats 4×8", "Romanian DL 3×10", "Step-ups 3×10/leg", "Leg curl 3×12"], run: "easy", runText: "First full 5K attempt" },
+      { day: "Sat", title: "Circuit training", items: ["3 rounds 45s on/15s off", "Burpees, KB swings", "Mountain climbers"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Full rest"], rest: true, run: "off", runText: "Full rest" }
+    ],
+    tips: ["By week 3 you should run 30+ min without stopping", "Friday is your first full 5K attempt — slow and steady, just finish it", "Increase weights 5% vs weeks 1–2", "Target 130–140g protein daily to preserve muscle"]
+  },
+  {
+    label: "Weeks 5–6", phase: "Peak — consistent 5K", phaseClass: "phase-3",
+    days: [
+      { day: "Mon", title: "Strength: heavy", items: ["Compound lifts 5×5", "Squats, press, rows", "90s rest between sets"], run: "full", runText: "Full 5K" },
+      { day: "Tue", title: "HIIT + core", items: ["30 min sprint intervals", "Plank variations 4×45s", "Russian twists 3×20"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Upper body volume", items: ["6 exercises 3×12", "Push/pull superset", "30–45s rest"], run: "full", runText: "Full 5K" },
+      { day: "Thu", title: "Active recovery", items: ["Stretching & foam roll", "Keep it easy today"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Full body circuit", items: ["4 rounds 8 exercises", "1 min each 30s rest", "Max effort"], run: "full", runText: "Full 5K" },
+      { day: "Sat", title: "Long activity", items: ["Hike, swim, or bike", "60–90 min low impact"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Full rest", "Prep meals for week"], rest: true, run: "off", runText: "Full rest" }
+    ],
+    tips: ["Three solid 5Ks per week at a comfortable pace — quality over quantity", "Off days are where your body actually adapts and gets stronger", "Don't drop below 1,600 cal/day — muscle loss kicks in below that", "By week 6 running feels much easier than week 1 — trust the process"]
+  }
+];
+
+var wCurrent = 0;
+var wTabsEl = document.getElementById('w-tabs');
+wWeeks.forEach(function(w, i) {
+  var btn = document.createElement('button');
+  btn.className = 'sub-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = w.label;
+  btn.onclick = function() { wCurrent = i; renderWorkout(); };
+  wTabsEl.appendChild(btn);
+});
+
+function renderWorkout() {
+  var w = wWeeks[wCurrent];
+  document.getElementById('w-phase').innerHTML = '<span class="badge ' + w.phaseClass + '">' + w.phase + '</span>';
+  document.getElementById('w-grid').innerHTML = w.days.map(function(d) {
+    return '<div class="card' + (d.rest ? ' rest-card' : '') + '">' +
+      '<div class="card-top-label">' + d.day + '</div>' +
+      '<div class="card-title">' + d.title + '</div>' +
+      '<ul class="card-items">' + d.items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' +
+      '<span class="badge run-' + d.run + '">' + d.runText + '</span>' +
+      '</div>';
+  }).join('');
+  document.getElementById('w-tips').innerHTML =
+    '<div class="tips-title">Tips for this phase</div>' +
+    w.tips.map(function(t) { return '<div class="tip">' + t + '</div>'; }).join('');
+  document.querySelectorAll('#w-tabs .sub-btn').forEach(function(b, i) { b.classList.toggle('active', i === wCurrent); });
+}
+renderWorkout();
+
+/* ── MEAL DATA ── */
+var mDays = [
+  { label: "Mon", options: [
+    { name: "Option A — classic chicken day", cal: 1840, protein: 142, meals: [
+      { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 pork or turkey sausage links", "Sauteed spinach", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Grilled chicken bowl", items: ["6 oz grilled chicken breast", "1/2 cup brown rice", "Roasted broccoli", "Olive oil drizzle"], badge: "p-chicken", badgeText: "chicken" },
+      { time: "Snack", title: "Greek yogurt and nuts", items: ["1 cup plain Greek yogurt", "Handful of almonds", "Optional: drizzle of honey"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Chicken stir-fry", items: ["6 oz chicken thighs", "Mixed vegetables", "Soy sauce + garlic + ginger", "1/2 cup white rice"], badge: "p-chicken", badgeText: "chicken" }
+    ]},
+    { name: "Option B — tuna lunch swap", cal: 1800, protein: 140, meals: [
+      { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage links", "Sauteed spinach", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna salad plate", items: ["2 cans tuna (5 oz each)", "1–2 tbsp mayo", "Diced celery and onion", "On lettuce — no bread needed"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "String cheese", "Celery sticks"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Dinner", title: "Baked chicken thighs", items: ["6 oz chicken thighs", "Garlic, lemon, olive oil", "Roasted green beans", "Small sweet potato"], badge: "p-chicken", badgeText: "chicken" }
+    ]}
+  ]},
+  { label: "Tue", options: [
+    { name: "Option A — beef day", cal: 1820, protein: 138, meals: [
+      { time: "Breakfast", title: "Fried eggs and sausage", items: ["3 fried eggs", "2 sausage patties", "Sliced tomato", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Burger bowl (no bun)", items: ["5 oz lean ground beef (90/10)", "Lettuce, tomato, onion, pickles", "Mustard or hot sauce", "Saves ~150 cal vs bun"], badge: "p-burger", badgeText: "beef" },
+      { time: "Snack", title: "Cottage cheese and veggies", items: ["1/2 cup cottage cheese", "Sliced bell peppers", "Cucumber rounds"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Beef and veggie skillet", items: ["5 oz lean ground beef", "Bell peppers, zucchini, onion", "Garlic + Italian seasoning", "Side salad with olive oil"], badge: "p-burger", badgeText: "beef" }
+    ]},
+    { name: "Option B — tuna lunch swap", cal: 1790, protein: 136, meals: [
+      { time: "Breakfast", title: "Fried eggs and sausage", items: ["3 fried eggs", "2 sausage patties", "Sliced tomato", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna melt lettuce wrap", items: ["2 cans tuna", "1 tbsp mayo, diced onion", "Slice of cheddar on top", "Served in romaine leaves"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Mixed berries"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Ground beef taco bowl", items: ["5 oz seasoned ground beef", "Salsa, lettuce, light sour cream", "1/4 cup black beans", "No shell — saves 150 cal"], badge: "p-burger", badgeText: "beef" }
+    ]}
+  ]},
+  { label: "Wed", options: [
+    { name: "Option A — fish dinner", cal: 1860, protein: 145, meals: [
+      { time: "Breakfast", title: "Veggie omelette and sausage", items: ["3-egg omelette", "Mushrooms, peppers, onion inside", "2 sausage links", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Grilled chicken wrap", items: ["6 oz grilled chicken", "Whole wheat tortilla", "Lettuce, salsa, light sour cream", "Lime juice"], badge: "p-chicken", badgeText: "chicken" },
+      { time: "Snack", title: "Almonds and fruit", items: ["Small handful almonds (1 oz)", "Apple or orange"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Baked salmon", items: ["6 oz salmon fillet", "Lemon, garlic, olive oil", "Roasted asparagus", "1/2 cup quinoa"], badge: "p-fish", badgeText: "fish" }
+    ]},
+    { name: "Option B — tuna lunch, tilapia dinner", cal: 1830, protein: 148, meals: [
+      { time: "Breakfast", title: "Veggie omelette and sausage", items: ["3-egg omelette", "Mushrooms, peppers, onion inside", "2 sausage links", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna stuffed avocado", items: ["2 cans tuna", "1 tbsp mayo, squeeze of lemon", "Diced celery", "Served in halved avocado"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Hot sauce if desired"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Dinner", title: "Pan-seared tilapia", items: ["6 oz tilapia", "Cajun seasoning + olive oil", "Roasted broccoli", "Side salad"], badge: "p-fish", badgeText: "fish" }
+    ]}
+  ]},
+  { label: "Thu", options: [
+    { name: "Option A — all chicken day", cal: 1830, protein: 140, meals: [
+      { time: "Breakfast", title: "Eggs over easy and sausage", items: ["3 eggs over easy", "2 sausage links", "Sliced avocado (1/4)", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Big chicken salad", items: ["6 oz grilled chicken", "Mixed greens, cucumber, tomato", "Olive oil + vinegar dressing", "Hard-boiled egg on top"], badge: "p-chicken", badgeText: "chicken" },
+      { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Handful walnuts"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Baked chicken thighs", items: ["6 oz bone-in chicken thighs", "Garlic, rosemary, olive oil", "Roasted green beans", "Small baked sweet potato"], badge: "p-chicken", badgeText: "chicken" }
+    ]},
+    { name: "Option B — tuna lunch", cal: 1800, protein: 138, meals: [
+      { time: "Breakfast", title: "Eggs over easy and sausage", items: ["3 eggs over easy", "2 sausage links", "Sliced avocado (1/4)", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Classic tuna salad", items: ["2 cans tuna", "1–2 tbsp mayo", "Diced celery, red onion, pickles", "On lettuce or cucumber slices"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "String cheese and fruit", items: ["2 string cheese", "Apple or pear"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Chicken soup", items: ["6 oz shredded chicken breast", "Carrots, celery, onion, garlic", "Low-sodium chicken broth", "Small portion egg noodles"], badge: "p-chicken", badgeText: "chicken" }
+    ]}
+  ]},
+  { label: "Fri", options: [
+    { name: "Option A — beef day", cal: 1800, protein: 136, meals: [
+      { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage patties", "Fresh berries on side", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Beef taco bowl (no shell)", items: ["5 oz seasoned ground beef", "1/2 cup black beans", "Salsa, lettuce, light cheese", "Saves ~150 cal without shell"], badge: "p-burger", badgeText: "beef" },
+      { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Apple"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Dinner", title: "Grilled burger (lettuce wrap)", items: ["5 oz lean beef patty", "Lettuce wrap, tomato, onion", "Mustard, pickles", "Side: roasted broccoli"], badge: "p-burger", badgeText: "beef" }
+    ]},
+    { name: "Option B — tuna lunch swap", cal: 1780, protein: 140, meals: [
+      { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage patties", "Fresh berries on side", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna and cucumber boats", items: ["2 cans tuna", "1 tbsp mayo, lemon juice", "Diced onion and dill", "Served in halved cucumbers"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Cottage cheese", items: ["1/2 cup cottage cheese", "Sliced tomatoes, black pepper"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Ground beef skillet", items: ["5 oz lean ground beef", "Zucchini, onion, tomatoes", "Italian seasoning + garlic", "Parmesan sprinkle on top"], badge: "p-burger", badgeText: "beef" }
+    ]}
+  ]},
+  { label: "Sat", options: [
+    { name: "Option A — fish day", cal: 1870, protein: 143, meals: [
+      { time: "Breakfast", title: "Eggs any style and sausage", items: ["3 eggs your way", "2 sausage links", "Sliced avocado", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Chicken soup or stew", items: ["6 oz shredded chicken", "Carrots, celery, onion", "Low-sodium chicken broth", "Optional small portion noodles"], badge: "p-chicken", badgeText: "chicken" },
+      { time: "Snack", title: "Greek yogurt and nuts", items: ["1 cup plain Greek yogurt", "Mixed nuts (small handful)"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Fish tacos (lettuce wrap)", items: ["6 oz cod or tilapia", "Lime, cumin, chili seasoning", "Shredded cabbage slaw", "Lettuce cups instead of tortillas"], badge: "p-fish", badgeText: "fish" }
+    ]},
+    { name: "Option B — tuna lunch, salmon dinner", cal: 1850, protein: 147, meals: [
+      { time: "Breakfast", title: "Eggs any style and sausage", items: ["3 eggs your way", "2 sausage links", "Sliced avocado", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna pasta salad (light)", items: ["2 cans tuna", "1 tbsp mayo", "1/2 cup cooked pasta (cooled)", "Diced celery, peas, red onion"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Handful almonds"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Dinner", title: "Baked salmon", items: ["6 oz salmon fillet", "Honey-garlic glaze (light)", "Roasted asparagus", "1/2 cup brown rice"], badge: "p-fish", badgeText: "fish" }
+    ]}
+  ]},
+  { label: "Sun", options: [
+    { name: "Option A — easy Sunday", cal: 1850, protein: 139, meals: [
+      { time: "Breakfast", title: "Big weekend egg plate", items: ["3–4 eggs scrambled", "3 sausage links (treat yourself)", "Sauteed onions and peppers", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Leftovers or chicken salad", items: ["Whatever protein is leftover", "Big leafy green salad", "Olive oil + lemon dressing", "Keep it simple"], badge: "p-chicken", badgeText: "chicken" },
+      { time: "Snack", title: "Light snack", items: ["Apple or berries", "String cheese or almonds"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Meal prep chicken", items: ["6 oz chicken breast or thigh", "Roasted mixed vegetables", "Brown rice or sweet potato", "Make extra for Monday"], badge: "p-chicken", badgeText: "chicken" }
+    ]},
+    { name: "Option B — tuna lunch, beef prep", cal: 1830, protein: 141, meals: [
+      { time: "Breakfast", title: "Big weekend egg plate", items: ["3–4 eggs scrambled", "3 sausage links", "Sauteed onions and peppers", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+      { time: "Lunch", title: "Tuna salad plate", items: ["2 cans tuna", "1–2 tbsp mayo", "Diced celery and pickles", "On lettuce, no bread needed"], badge: "p-tuna", badgeText: "tuna" },
+      { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Handful of walnuts"], badge: "p-mixed", badgeText: "mixed" },
+      { time: "Dinner", title: "Beef patties meal prep", items: ["5–6 oz lean beef patties x2", "Cook extra for the week", "Roasted broccoli and sweet potato", "Season with salt, pepper, garlic"], badge: "p-burger", badgeText: "beef" }
+    ]}
+  ]}
+];
+
+var mCurrent = 0;
+var mOption = 0;
+
+var mTabsEl = document.getElementById('m-tabs');
+mDays.forEach(function(d, i) {
+  var btn = document.createElement('button');
+  btn.className = 'sub-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = d.label;
+  btn.onclick = function() { mCurrent = i; renderMeals(); };
+  mTabsEl.appendChild(btn);
+});
+
+function setMealOption(idx) {
+  mOption = idx;
+  document.getElementById('opt-a').classList.toggle('active', idx === 0);
+  document.getElementById('opt-b').classList.toggle('active', idx === 1);
+  renderMeals();
+}
+
+function renderMeals() {
+  var d = mDays[mCurrent];
+  var opt = d.options[mOption];
+  document.getElementById('m-grid').innerHTML = opt.meals.map(function(m) {
+    return '<div class="card">' +
+      '<div class="card-top-label">' + m.time + '</div>' +
+      '<div class="card-title">' + m.title + '</div>' +
+      '<ul class="card-items">' + m.items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' +
+      '<span class="badge ' + m.badge + '">' + m.badgeText + '</span>' +
+      '</div>';
+  }).join('');
+  document.getElementById('m-total').innerHTML =
+    '<div class="info-bar-label">' + d.label + ' · ' + opt.name + '</div>' +
+    '<div class="info-bar-vals">' +
+      '<div class="ibv"><div class="ibv-num">~' + opt.cal + '</div><div class="ibv-sub">calories</div></div>' +
+      '<div class="ibv"><div class="ibv-num">~' + opt.protein + 'g</div><div class="ibv-sub">protein</div></div>' +
+    '</div>';
+  document.querySelectorAll('#m-tabs .sub-btn').forEach(function(b, i) { b.classList.toggle('active', i === mCurrent); });
+}
+renderMeals();
+</script>
+</body>
+</html>
