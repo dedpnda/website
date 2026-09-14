@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-Week Workout Plan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f2; color: #1a1a18; padding: 2rem 1rem; }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 24px; font-weight: 600; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+  .stat { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; border: 1px solid #e8e8e4; }
+  .stat-label { font-size: 11px; color: #aaa; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 20px; font-weight: 600; }
+
+  .week-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .week-btn { padding: 8px 18px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff; color: #666; transition: all 0.15s; font-family: inherit; }
+  .week-btn:hover { border-color: #999; color: #333; }
+  .week-btn.active { background: #1a1a18; color: #fff; border-color: #1a1a18; font-weight: 500; }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+
+  .phase-badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 99px; margin-bottom: 1rem; font-weight: 500; }
+  .phase-1 { background: #dceefb; color: #1a5c99; }
+  .phase-2 { background: #dff0d0; color: #2d6e10; }
+  .phase-3 { background: #fde8c4; color: #7a4a08; }
+
+  .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .day-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1rem; }
+  .day-card.rest-card { background: #fafaf8; border-style: dashed; }
+  .day-label { font-size: 10px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .day-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #1a1a18; }
+  .rest-card .day-title { color: #aaa; }
+  .day-items { list-style: none; margin-bottom: 10px; }
+  .day-items li { font-size: 12px; color: #666; padding: 2px 0; line-height: 1.5; }
+  .day-items li::before { content: "·"; margin-right: 5px; color: #ccc; }
+
+  .run-badge { font-size: 11px; padding: 3px 9px; border-radius: 99px; display: inline-block; font-weight: 500; }
+  .run-easy { background: #dceefb; color: #1a5c99; }
+  .run-full { background: #dff0d0; color: #2d6e10; }
+  .run-off { background: #f0efe8; color: #888; }
+
+  .tips { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .tips-title { font-size: 13px; font-weight: 600; color: #666; margin-bottom: 10px; }
+  .tip { font-size: 13px; color: #555; padding: 4px 0; line-height: 1.5; }
+  .tip::before { content: "→"; margin-right: 8px; color: #bbb; }
+
+  .notes { margin-top: 2rem; background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .notes h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+  .notes ul { list-style: none; }
+  .notes li { font-size: 13px; color: #555; padding: 4px 0; line-height: 1.6; }
+  .notes li::before { content: "✓"; margin-right: 8px; color: #5a9e3a; }
+
+  footer { margin-top: 2rem; font-size: 12px; color: #bbb; text-align: center; }
+
+  @media (max-width: 500px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .stats-row .stat:last-child { grid-column: span 2; }
+    h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>6-Week Workout Plan</h1>
+  <p class="subtitle">Male · 43 yrs · 165 lb → 145–150 lb goal · 5K every other day</p>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-label">Start weight</div><div class="stat-val">165 lb</div></div>
+    <div class="stat"><div class="stat-label">Goal weight</div><div class="stat-val">145–150 lb</div></div>
+    <div class="stat"><div class="stat-label">Run days/week</div><div class="stat-val">3–4</div></div>
+  </div>
+
+  <div class="week-tabs" id="tabs"></div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="run-badge run-easy">run/walk</span> building up</div>
+    <div class="legend-item"><span class="run-badge run-full">full 5K</span> goal pace</div>
+    <div class="legend-item"><span class="run-badge run-off">no run</span> rest legs</div>
+  </div>
+
+  <div id="phase-label"></div>
+  <div class="day-grid" id="day-grid"></div>
+  <div class="tips" id="tips-box"></div>
+
+  <div class="notes">
+    <h2>Key reminders</h2>
+    <ul>
+      <li>Nutrition is 70–80% of fat loss — aim for ~1,800–2,000 cal/day, 130–140g protein</li>
+      <li>Never drop below 1,600 cal/day — muscle loss kicks in below that</li>
+      <li>Black coffee with half and half before your run is totally fine</li>
+      <li>5 min dynamic warmup before every run: leg swings, high knees, hip circles</li>
+      <li>Stretch calves and hamstrings after every run to prevent shin splints</li>
+      <li>Off days aren't laziness — tendons and joints adapt on rest days</li>
+      <li>Weigh yourself weekly, same time each morning, for an accurate trend</li>
+      <li>Realistic goal: 1.5–2.5 lb/week lost with good adherence</li>
+    </ul>
+  </div>
+
+  <footer>Generated for personal use · Always consult a doctor before starting a new exercise program</footer>
+</div>
+
+<script>
+const weeks = [
+  {
+    label: "Weeks 1–2", phase: "Foundation — every other day", phaseClass: "phase-1",
+    days: [
+      { day: "Mon", title: "Strength: full body", items: ["Goblet squats 3×12", "Push-ups 3×10", "DB rows 3×12", "Plank 3×30s"], run: "easy", runText: "20 min run/walk" },
+      { day: "Tue", title: "Core + mobility", items: ["Dead bug 3×10", "Hip circles", "Leg swings", "Light stretching"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Strength: upper", items: ["DB press 3×10", "Lat pulldown 3×12", "Shoulder press 3×10", "Face pulls 3×15"], run: "easy", runText: "20 min run/walk" },
+      { day: "Thu", title: "Active recovery", items: ["Foam rolling", "Light stretching", "Easy mobility"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Strength: lower", items: ["Lunges 3×10/leg", "Leg press 3×12", "Romanian DL 3×10", "Calf raises 3×15"], run: "easy", runText: "22 min run/walk" },
+      { day: "Sat", title: "Light circuit", items: ["Bodyweight only", "3 rounds, easy pace", "Focus on form"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Rest & recover", "Short walk optional"], rest: true, run: "off", runText: "Full rest" },
+    ],
+    tips: ["Run 2 min, walk 1 min — repeat for the full session duration", "The off days let your shins, knees, and tendons recover — this prevents injury", "5 min dynamic warmup before every run: leg swings, high knees, hip circles", "Stretch calves and hamstrings after every run — tight calves cause shin splints"]
+  },
+  {
+    label: "Weeks 3–4", phase: "Building — longer runs", phaseClass: "phase-2",
+    days: [
+      { day: "Mon", title: "Strength: push", items: ["Bench press 4×8", "Incline DB press 3×10", "Tricep dips 3×10", "Lateral raises 3×12"], run: "easy", runText: "30 min continuous" },
+      { day: "Tue", title: "HIIT cardio", items: ["20 min intervals", "40s hard / 50s easy", "Bike or treadmill"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Strength: pull", items: ["Pull-ups 4×6", "Cable rows 3×10", "Bicep curls 3×12", "Face pulls 3×15"], run: "easy", runText: "32 min continuous" },
+      { day: "Thu", title: "Active recovery", items: ["Stretching & foam roll", "Light mobility work"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Strength: legs", items: ["Squats 4×8", "Romanian DL 3×10", "Step-ups 3×10/leg", "Leg curl 3×12"], run: "easy", runText: "First full 5K attempt" },
+      { day: "Sat", title: "Circuit training", items: ["3 rounds, 45s on/15s off", "Burpees, KB swings", "Mountain climbers"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Full rest"], rest: true, run: "off", runText: "Full rest" },
+    ],
+    tips: ["By week 3 you should be running 30+ min without stopping", "Friday is your first full 5K attempt — slow and steady, just finish it", "Increase weights 5% vs weeks 1–2", "Target 130–140g protein per day to preserve muscle while losing fat"]
+  },
+  {
+    label: "Weeks 5–6", phase: "Peak — consistent 5K", phaseClass: "phase-3",
+    days: [
+      { day: "Mon", title: "Strength: heavy", items: ["Compound lifts 5×5", "Squats, press, rows", "90s rest between sets"], run: "full", runText: "Full 5K" },
+      { day: "Tue", title: "HIIT + core", items: ["30 min sprint intervals", "Plank variations 4×45s", "Russian twists 3×20"], run: "off", runText: "No run — rest legs" },
+      { day: "Wed", title: "Upper body volume", items: ["6 exercises, 3×12", "Push/pull superset", "30–45s rest"], run: "full", runText: "Full 5K" },
+      { day: "Thu", title: "Active recovery", items: ["Stretching & foam roll", "Keep it easy today"], run: "off", runText: "No run — rest legs" },
+      { day: "Fri", title: "Full body circuit", items: ["4 rounds, 8 exercises", "1 min each, 30s rest", "Max effort"], run: "full", runText: "Full 5K" },
+      { day: "Sat", title: "Long activity", items: ["Hike, swim, or bike", "60–90 min low impact"], run: "off", runText: "No run — rest legs" },
+      { day: "Sun", title: "Full rest", items: ["Full rest", "Prep meals for week"], rest: true, run: "off", runText: "Full rest" },
+    ],
+    tips: ["Three solid 5Ks per week at a comfortable pace — quality over quantity", "The off days aren't laziness, they're where your body adapts and gets stronger", "Don't drop calories below 1,600 — below that you start losing muscle", "By week 6 you should be noticeably leaner and running feels much easier than week 1"]
+  }
+];
+
+let current = 0;
+
+function render() {
+  const w = weeks[current];
+  document.getElementById("phase-label").innerHTML = '<span class="phase-badge ' + w.phaseClass + '">' + w.phase + '</span>';
+  document.getElementById("day-grid").innerHTML = w.days.map(function(d) {
+    return '<div class="day-card ' + (d.rest ? 'rest-card' : '') + '">' +
+      '<div class="day-label">' + d.day + '</div>' +
+      '<div class="day-title">' + d.title + '</div>' +
+      '<ul class="day-items">' + d.items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' +
+      '<span class="run-badge run-' + d.run + '">' + d.runText + '</span>' +
+      '</div>';
+  }).join('');
+  document.getElementById("tips-box").innerHTML =
+    '<div class="tips-title">Tips for this phase</div>' +
+    w.tips.map(function(t) { return '<div class="tip">' + t + '</div>'; }).join('');
+  document.querySelectorAll(".week-btn").forEach(function(b, i) {
+    b.classList.toggle("active", i === current);
+  });
+}
+
+const tabs = document.getElementById("tabs");
+weeks.forEach(function(w, i) {
+  const btn = document.createElement("button");
+  btn.className = "week-btn" + (i === 0 ? " active" : "");
+  btn.textContent = w.label;
+  btn.onclick = function() { current = i; render(); };
+  tabs.appendChild(btn);
+});
+
+render();
+</script>
+</body>
+</html>
