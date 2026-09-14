@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Meal Plan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f2; color: #1a1a18; padding: 2rem 1rem; }
+  .container { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 24px; font-weight: 600; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 2rem; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 2rem; }
+  .stat { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; border: 1px solid #e8e8e4; }
+  .stat-label { font-size: 11px; color: #aaa; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 20px; font-weight: 600; }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #666; }
+
+  .day-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .day-btn { padding: 8px 16px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff; color: #666; font-family: inherit; transition: all 0.15s; }
+  .day-btn:hover { border-color: #999; color: #333; }
+  .day-btn.active { background: #1a1a18; color: #fff; border-color: #1a1a18; font-weight: 500; }
+
+  .option-toggle { display: flex; gap: 8px; margin-bottom: 1.25rem; align-items: center; }
+  .option-label { font-size: 13px; color: #888; margin-right: 4px; }
+  .opt-btn { padding: 6px 16px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff; color: #666; font-family: inherit; transition: all 0.15s; }
+  .opt-btn.active { background: #2d6e10; color: #fff; border-color: #2d6e10; font-weight: 500; }
+
+  .meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+  .meal-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1rem; }
+  .meal-time { font-size: 10px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .meal-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #1a1a18; }
+  .meal-items { list-style: none; margin-bottom: 10px; }
+  .meal-items li { font-size: 12px; color: #666; padding: 2px 0; line-height: 1.5; }
+  .meal-items li::before { content: "·"; margin-right: 5px; color: #ccc; }
+  .protein-badge { font-size: 11px; padding: 3px 9px; border-radius: 99px; display: inline-block; font-weight: 500; }
+  .p-chicken { background: #dff0d0; color: #2d6e10; }
+  .p-burger  { background: #fde8c4; color: #7a4a08; }
+  .p-fish    { background: #dceefb; color: #1a5c99; }
+  .p-tuna    { background: #e8e4fb; color: #4a3a99; }
+  .p-egg     { background: #fce4f0; color: #7a2050; }
+  .p-mixed   { background: #f0efe8; color: #666; }
+
+  .daily-total { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+  .dt-label { font-size: 13px; color: #666; }
+  .dt-vals { display: flex; gap: 24px; }
+  .dt-val { text-align: right; }
+  .dt-num { font-size: 16px; font-weight: 600; color: #1a1a18; }
+  .dt-sub { font-size: 11px; color: #aaa; }
+
+  .notes { background: #fff; border: 1px solid #e8e8e4; border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 1rem; }
+  .notes h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+  .notes ul { list-style: none; }
+  .notes li { font-size: 13px; color: #555; padding: 4px 0; line-height: 1.6; }
+  .notes li::before { content: "✓"; margin-right: 8px; color: #5a9e3a; }
+
+  footer { margin-top: 2rem; font-size: 12px; color: #bbb; text-align: center; }
+
+  @media (max-width: 500px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 20px; }
+    .day-btn { padding: 6px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Weekly Meal Plan</h1>
+  <p class="subtitle">Male · 43 yrs · ~1,850 cal/day · ~140g protein · fat loss focus</p>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-label">Daily calories</div><div class="stat-val">~1,850</div></div>
+    <div class="stat"><div class="stat-label">Daily protein</div><div class="stat-val">~140g</div></div>
+    <div class="stat"><div class="stat-label">Meals/day</div><div class="stat-val">3 + snack</div></div>
+    <div class="stat"><div class="stat-label">Deficit</div><div class="stat-val">~500 cal</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="protein-badge p-chicken">chicken</span></div>
+    <div class="legend-item"><span class="protein-badge p-burger">beef</span></div>
+    <div class="legend-item"><span class="protein-badge p-fish">fish</span></div>
+    <div class="legend-item"><span class="protein-badge p-tuna">tuna</span></div>
+    <div class="legend-item"><span class="protein-badge p-egg">eggs/sausage</span></div>
+    <div class="legend-item"><span class="protein-badge p-mixed">mixed</span></div>
+  </div>
+
+  <div class="day-tabs" id="tabs"></div>
+
+  <div class="option-toggle">
+    <span class="option-label">Meal option:</span>
+    <button class="opt-btn active" id="opt1-btn" onclick="setOption(0)">Option A</button>
+    <button class="opt-btn" id="opt2-btn" onclick="setOption(1)">Option B</button>
+  </div>
+
+  <div class="meal-grid" id="meal-grid"></div>
+  <div class="daily-total" id="daily-total"></div>
+
+  <div class="notes">
+    <h2>Key reminders</h2>
+    <ul>
+      <li>Breakfast is the same every day — eggs and sausage. Keep it simple and consistent.</li>
+      <li>Tuna with 1–2 tbsp mayo is totally fine. Use it as a binder, not a scoop.</li>
+      <li>Skip the bun on burgers and the shell on tacos — saves ~150 cal with no loss of fullness.</li>
+      <li>Fish days (Wed, Sat): salmon is the best choice — omega-3s help with recovery from running.</li>
+      <li>Aim for 130–140g protein daily to preserve muscle while losing fat.</li>
+      <li>Greek yogurt (plain, full fat) is one of the best snacks — high protein, filling, no sugar.</li>
+      <li>Drink at least 10 cups of water daily — hunger is often just dehydration.</li>
+      <li>Prep extra at Sunday dinner for Monday — makes the week much easier.</li>
+    </ul>
+  </div>
+
+  <footer>For personal use · Pair with your 6-week workout plan</footer>
+</div>
+
+<script>
+var currentDay = 0;
+var currentOption = 0;
+
+var days = [
+  {
+    label: "Mon",
+    options: [
+      {
+        name: "Option A — classic chicken day",
+        cal: 1840, protein: 142,
+        meals: [
+          { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 pork or turkey sausage links", "Sauteed spinach", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Grilled chicken bowl", items: ["6 oz grilled chicken breast", "1/2 cup brown rice", "Roasted broccoli", "Olive oil drizzle"], badge: "p-chicken", badgeText: "chicken" },
+          { time: "Snack", title: "Greek yogurt and nuts", items: ["1 cup plain Greek yogurt", "Handful of almonds", "Optional: drizzle of honey"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Chicken stir-fry", items: ["6 oz chicken thighs", "Mixed vegetables", "Soy sauce + garlic + ginger", "1/2 cup white rice"], badge: "p-chicken", badgeText: "chicken" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch swap",
+        cal: 1800, protein: 140,
+        meals: [
+          { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage links", "Sauteed spinach", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna salad plate", items: ["2 cans tuna (5 oz each)", "1–2 tbsp mayo", "Diced celery and onion", "Served on lettuce, no bread"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "String cheese", "Celery sticks"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Dinner", title: "Baked chicken thighs", items: ["6 oz chicken thighs", "Garlic, lemon, olive oil", "Roasted green beans", "Small sweet potato"], badge: "p-chicken", badgeText: "chicken" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Tue",
+    options: [
+      {
+        name: "Option A — beef day",
+        cal: 1820, protein: 138,
+        meals: [
+          { time: "Breakfast", title: "Fried eggs and sausage", items: ["3 fried eggs", "2 sausage patties", "Sliced tomato", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Burger bowl (no bun)", items: ["5 oz lean ground beef (90/10)", "Lettuce, tomato, onion, pickles", "Mustard or hot sauce", "Saves ~150 cal vs bun"], badge: "p-burger", badgeText: "beef" },
+          { time: "Snack", title: "Cottage cheese and veggies", items: ["1/2 cup cottage cheese", "Sliced bell peppers", "Cucumber rounds"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Beef and veggie skillet", items: ["5 oz lean ground beef", "Bell peppers, zucchini, onion", "Garlic + Italian seasoning", "Side salad with olive oil"], badge: "p-burger", badgeText: "beef" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch swap",
+        cal: 1790, protein: 136,
+        meals: [
+          { time: "Breakfast", title: "Fried eggs and sausage", items: ["3 fried eggs", "2 sausage patties", "Sliced tomato", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna melt lettuce wrap", items: ["2 cans tuna", "1 tbsp mayo, diced onion", "Slice of cheddar on top", "Served in romaine leaves"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Mixed berries"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Ground beef taco bowl", items: ["5 oz seasoned ground beef", "Salsa, lettuce, light sour cream", "1/4 cup black beans", "No shell — saves 150 cal"], badge: "p-burger", badgeText: "beef" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Wed",
+    options: [
+      {
+        name: "Option A — fish dinner",
+        cal: 1860, protein: 145,
+        meals: [
+          { time: "Breakfast", title: "Veggie omelette and sausage", items: ["3-egg omelette", "Mushrooms, peppers, onion inside", "2 sausage links", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Grilled chicken wrap", items: ["6 oz grilled chicken", "Whole wheat tortilla", "Lettuce, salsa, light sour cream", "Lime juice"], badge: "p-chicken", badgeText: "chicken" },
+          { time: "Snack", title: "Almonds and fruit", items: ["Small handful almonds (1 oz)", "Apple or orange"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Baked salmon", items: ["6 oz salmon fillet", "Lemon, garlic, olive oil", "Roasted asparagus", "1/2 cup quinoa"], badge: "p-fish", badgeText: "fish" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch, tilapia dinner",
+        cal: 1830, protein: 148,
+        meals: [
+          { time: "Breakfast", title: "Veggie omelette and sausage", items: ["3-egg omelette", "Mushrooms, peppers, onion inside", "2 sausage links", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna stuffed avocado", items: ["2 cans tuna", "1 tbsp mayo, squeeze of lemon", "Diced celery", "Served in halved avocado"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Hot sauce if desired"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Dinner", title: "Pan-seared tilapia", items: ["6 oz tilapia", "Cajun seasoning + olive oil", "Roasted broccoli", "Side salad"], badge: "p-fish", badgeText: "fish" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Thu",
+    options: [
+      {
+        name: "Option A — all chicken day",
+        cal: 1830, protein: 140,
+        meals: [
+          { time: "Breakfast", title: "Eggs over easy and sausage", items: ["3 eggs over easy", "2 sausage links", "Sliced avocado (1/4)", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Big chicken salad", items: ["6 oz grilled chicken", "Mixed greens, cucumber, tomato", "Olive oil + vinegar dressing", "Hard-boiled egg on top"], badge: "p-chicken", badgeText: "chicken" },
+          { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Handful walnuts"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Baked chicken thighs", items: ["6 oz bone-in chicken thighs", "Garlic, rosemary, olive oil", "Roasted green beans", "Small baked sweet potato"], badge: "p-chicken", badgeText: "chicken" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch",
+        cal: 1800, protein: 138,
+        meals: [
+          { time: "Breakfast", title: "Eggs over easy and sausage", items: ["3 eggs over easy", "2 sausage links", "Sliced avocado (1/4)", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Classic tuna salad", items: ["2 cans tuna", "1–2 tbsp mayo", "Diced celery, red onion, pickles", "On lettuce or with cucumber slices"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "String cheese and fruit", items: ["2 string cheese", "Apple or pear"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Chicken soup", items: ["6 oz shredded chicken breast", "Carrots, celery, onion, garlic", "Low-sodium chicken broth", "Small portion egg noodles"], badge: "p-chicken", badgeText: "chicken" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Fri",
+    options: [
+      {
+        name: "Option A — beef day",
+        cal: 1800, protein: 136,
+        meals: [
+          { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage patties", "Fresh berries on side", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Beef taco bowl (no shell)", items: ["5 oz seasoned ground beef", "1/2 cup black beans", "Salsa, lettuce, light cheese", "Saves ~150 cal without shell"], badge: "p-burger", badgeText: "beef" },
+          { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Apple"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Dinner", title: "Grilled burger patty (lettuce wrap)", items: ["5 oz lean beef patty", "Lettuce wrap, tomato, onion", "Mustard, pickles", "Side: roasted broccoli"], badge: "p-burger", badgeText: "beef" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch swap",
+        cal: 1780, protein: 140,
+        meals: [
+          { time: "Breakfast", title: "Scrambled eggs and sausage", items: ["3 scrambled eggs", "2 sausage patties", "Fresh berries on side", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna and cucumber boats", items: ["2 cans tuna", "1 tbsp mayo, lemon juice", "Diced onion and dill", "Served in halved cucumbers"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Cottage cheese", items: ["1/2 cup cottage cheese", "Sliced tomatoes", "Black pepper"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Ground beef skillet", items: ["5 oz lean ground beef", "Zucchini, onion, tomatoes", "Italian seasoning + garlic", "Parmesan sprinkle on top"], badge: "p-burger", badgeText: "beef" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Sat",
+    options: [
+      {
+        name: "Option A — fish day",
+        cal: 1870, protein: 143,
+        meals: [
+          { time: "Breakfast", title: "Eggs any style and sausage", items: ["3 eggs your way", "2 sausage links", "Sliced avocado", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Chicken soup or stew", items: ["6 oz shredded chicken", "Vegetables: carrots, celery, onion", "Low-sodium chicken broth", "Optional small portion noodles"], badge: "p-chicken", badgeText: "chicken" },
+          { time: "Snack", title: "Greek yogurt and nuts", items: ["1 cup plain Greek yogurt", "Mixed nuts (small handful)"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Fish tacos (lettuce wrap)", items: ["6 oz cod or tilapia", "Lime, cumin, chili seasoning", "Shredded cabbage slaw", "Lettuce cups instead of tortillas"], badge: "p-fish", badgeText: "fish" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch, salmon dinner",
+        cal: 1850, protein: 147,
+        meals: [
+          { time: "Breakfast", title: "Eggs any style and sausage", items: ["3 eggs your way", "2 sausage links", "Sliced avocado", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna pasta salad (light)", items: ["2 cans tuna", "1 tbsp mayo", "1/2 cup cooked pasta (cooled)", "Diced celery, peas, red onion"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Hard-boiled eggs", items: ["2 hard-boiled eggs", "Handful almonds"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Dinner", title: "Baked salmon", items: ["6 oz salmon fillet", "Honey-garlic glaze (light)", "Roasted asparagus", "1/2 cup brown rice"], badge: "p-fish", badgeText: "fish" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Sun",
+    options: [
+      {
+        name: "Option A — easy Sunday",
+        cal: 1850, protein: 139,
+        meals: [
+          { time: "Breakfast", title: "Big weekend egg plate", items: ["3–4 eggs scrambled", "3 sausage links (treat yourself)", "Sauteed onions and peppers", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Leftovers or chicken salad", items: ["Whatever protein is leftover", "Big leafy green salad", "Olive oil + lemon dressing", "Keep it simple"], badge: "p-chicken", badgeText: "chicken" },
+          { time: "Snack", title: "Light snack", items: ["Apple or berries", "String cheese or almonds"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Meal prep chicken", items: ["6 oz chicken breast or thigh", "Roasted mixed vegetables", "Brown rice or sweet potato", "Make extra for Monday"], badge: "p-chicken", badgeText: "chicken" }
+        ]
+      },
+      {
+        name: "Option B — tuna lunch, beef dinner",
+        cal: 1830, protein: 141,
+        meals: [
+          { time: "Breakfast", title: "Big weekend egg plate", items: ["3–4 eggs scrambled", "3 sausage links", "Sauteed onions and peppers", "Coffee w/ half & half"], badge: "p-egg", badgeText: "eggs/sausage" },
+          { time: "Lunch", title: "Tuna salad plate", items: ["2 cans tuna", "1–2 tbsp mayo", "Diced celery and pickles", "On lettuce, no bread needed"], badge: "p-tuna", badgeText: "tuna" },
+          { time: "Snack", title: "Greek yogurt", items: ["1 cup plain Greek yogurt", "Handful of walnuts"], badge: "p-mixed", badgeText: "mixed" },
+          { time: "Dinner", title: "Beef burger patties meal prep", items: ["5–6 oz lean beef patties x2", "Cook extra for the week", "Roasted broccoli and sweet potato", "Season simply — salt, pepper, garlic"], badge: "p-burger", badgeText: "beef" }
+        ]
+      }
+    ]
+  }
+];
+
+function setOption(idx) {
+  currentOption = idx;
+  document.getElementById("opt1-btn").classList.toggle("active", idx === 0);
+  document.getElementById("opt2-btn").classList.toggle("active", idx === 1);
+  render();
+}
+
+function render() {
+  var d = days[currentDay];
+  var opt = d.options[currentOption];
+  document.getElementById("meal-grid").innerHTML = opt.meals.map(function(m) {
+    return '<div class="meal-card">' +
+      '<div class="meal-time">' + m.time + '</div>' +
+      '<div class="meal-title">' + m.title + '</div>' +
+      '<ul class="meal-items">' + m.items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' +
+      '<span class="protein-badge ' + m.badge + '">' + m.badgeText + '</span>' +
+      '</div>';
+  }).join('');
+  document.getElementById("daily-total").innerHTML =
+    '<div class="dt-label">' + days[currentDay].label + ' · ' + opt.name + '</div>' +
+    '<div class="dt-vals">' +
+      '<div class="dt-val"><div class="dt-num">~' + opt.cal + '</div><div class="dt-sub">calories</div></div>' +
+      '<div class="dt-val"><div class="dt-num">~' + opt.protein + 'g</div><div class="dt-sub">protein</div></div>' +
+    '</div>';
+  document.querySelectorAll(".day-btn").forEach(function(b, i) { b.classList.toggle("active", i === currentDay); });
+}
+
+var tabs = document.getElementById("tabs");
+days.forEach(function(d, i) {
+  var btn = document.createElement("button");
+  btn.className = "day-btn" + (i === 0 ? " active" : "");
+  btn.textContent = d.label;
+  btn.onclick = function() { currentDay = i; render(); };
+  tabs.appendChild(btn);
+});
+
+render();
+</script>
+</body>
+</html>
